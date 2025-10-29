@@ -39,6 +39,8 @@ export type Transaction = {
   created_at: string;
 };
 
+
+
 export type Business = {
   id: string;
   name: string;
@@ -48,3 +50,10 @@ export type Business = {
   image_url: string;
   created_at: string;
 };
+
+
+
+
+
+
+
