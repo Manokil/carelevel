@@ -21,7 +21,7 @@
       - `amount` (numeric)
       - `token_type` (text: 'SOL', 'BTC', etc.)
       - `recipient` (text, nullable - for donations)
-      - `status` (text: 'pending', 'completed', 'failed')
+      - `status` (text: 'pending', 'success', 'failed')
       - `created_at` (timestamptz)
     
     - `businesses`
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS transactions (
   amount numeric NOT NULL CHECK (amount > 0),
   token_type text NOT NULL DEFAULT 'SOL',
   recipient text,
-  status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'failed')),
+  status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'success', 'failed')),
   created_at timestamptz DEFAULT now()
 );
 

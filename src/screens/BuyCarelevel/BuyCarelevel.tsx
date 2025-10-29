@@ -3,24 +3,39 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { Button } from '../../components/ui/button';
-import { Input } from '../../components/ui/input';
-import { Label } from '../../components/ui/label';
-import { Card, CardContent } from '../../components/ui/card';
-import { ArrowLeftIcon } from 'lucide-react';
-
-const tokens = [
-  { id: 'sol', name: 'Solana', symbol: 'SOL', image: '/token-branded-sol.svg' },
-  { id: 'btc', name: 'Bitcoin', symbol: 'BTC', image: '/cryptocurrency-color-btc.svg' },
-  { id: 'other', name: 'Other Token', symbol: 'TOKEN', image: '/image-2.png' },
-];
 
 export const BuyCarelevel = (): JSX.Element => {
-  const [amount, setAmount] = useState('');
-  const [selectedToken, setSelectedToken] = useState('sol');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [copySuccess, setCopySuccess] = useState(false);
   const { user, profile } = useAuth();
   const navigate = useNavigate();
+
+  const tokenAddress = '8ZgBsi5s5xZKKKvz5BxSyzqgdh5d5oX3DtL9twAJpump';
+
+  const handleCopyAddress = async () => {
+    try {
+      await navigator.clipboard.writeText(tokenAddress);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000); // Hide success message after 2 seconds
+    } catch (err) {
+      console.error('Failed to copy address:', err);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = tokenAddress;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000);
+      } catch (fallbackErr) {
+        console.error('Fallback copy failed:', fallbackErr);
+        alert('Failed to copy address. Please copy manually: ' + tokenAddress);
+      }
+      document.body.removeChild(textArea);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,22 +49,24 @@ export const BuyCarelevel = (): JSX.Element => {
     setLoading(true);
 
     try {
+      // For demo purposes, using a fixed amount
+      const amount = 100;
       const { data, error: transactionError } = await supabase
         .from('transactions')
         .insert({
           user_id: user.id,
           type: 'purchase',
-          amount: parseFloat(amount),
-          token_type: tokens.find(t => t.id === selectedToken)?.symbol || 'SOL',
-          status: 'completed',
+          amount: amount,
+          token_type: 'SOL',
+          status: 'success',
         })
         .select()
         .single();
 
       if (transactionError) throw transactionError;
 
-      const newPurchased = (parseFloat(profile.total_purchased.toString()) + parseFloat(amount));
-      const newScore = (parseFloat(profile.carelevel_score.toString()) + parseFloat(amount) * 100);
+      const newPurchased = (parseFloat(profile.total_purchased.toString()) + amount);
+      const newScore = (parseFloat(profile.carelevel_score.toString()) + amount * 100);
 
       const { error: updateError } = await supabase
         .from('profiles')
@@ -70,95 +87,22 @@ export const BuyCarelevel = (): JSX.Element => {
   };
 
   return (
-    <div className="min-h-screen bg-light-modeblack dark:bg-light-modeblack px-4 py-8 md:px-8 lg:px-[170px] transition-colors duration-300">
-      <div className="max-w-2xl mx-auto">
-        <Button
-          onClick={() => navigate(-1)}
-          className="mb-6 h-auto bg-light-modedark-grey rounded-md border border-solid border-[#d7dce5] px-4 py-2 [font-family:'Noto_Sans',Helvetica] font-medium text-light-modewhite text-sm hover:bg-light-modedark-grey/90"
-        >
-          <ArrowLeftIcon className="w-4 h-4 mr-2" />
-          Back
-        </Button>
-
-        <Card className="bg-light-modedark-grey dark:bg-light-modedark-grey border-[#d7dce5] transition-all duration-300">
-          <CardContent className="p-8">
-            <div className="flex flex-col gap-6">
-              <div className="text-center">
-                <h1 className="[font-family:'Noto_Sans',Helvetica] font-semibold text-light-modewhite text-3xl tracking-[0] leading-10 mb-2">
+    <div className="bg-light-modeblack dark:bg-[#171B20] transition-colors duration-100">
+      <div className="mx-auto">
+              <div className="text-center pb-4">
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <img src="/pumpfun.svg" alt="Pump.fun" className="w-32px h-32px" />
+                  <span className="[font-family:'Noto_Sans',Helvetica] text-light-modewhite dark:text-[#F4FAFF] text-xl tracking-[0] leading-10">X</span>
+                  <img src="/subtract.svg" alt="Pump.fun" className="w-32px h-32px" />
+                </div>
+                <h1 className="[font-family:'Noto_Sans',Helvetica] font-semibold text-light-modewhite dark:text-[#F4FAFF] text-3xl tracking-[0] leading-10 mb-2">
                   Buy $CARELEVEL
-                </h1>
-                <p className="[font-family:'Noto_Sans',Helvetica] font-normal text-light-modegrey text-base tracking-[0] leading-6">
-                  Purchase CareLevel tokens to support the community
-                </p>
-              </div>
+                  <br />
+                   Tokens
+                </h1>                
+              </div>             
 
-              <div className="flex items-center justify-center gap-6 p-6 bg-light-modeblack rounded-md border border-[#d7dce5]">
-                <div className="text-center">
-                  <p className="[font-family:'Noto_Sans',Helvetica] font-normal text-light-modegrey text-sm mb-1">
-                    Current Price
-                  </p>
-                  <p className="[font-family:'Noto_Sans',Helvetica] font-semibold text-light-modewhite text-2xl">
-                    $0.0000083262
-                  </p>
-                </div>
-                <div className="w-px h-12 bg-[#d7dce5]" />
-                <div className="text-center">
-                  <p className="[font-family:'Noto_Sans',Helvetica] font-normal text-light-modegrey text-sm mb-1">
-                    24h Change
-                  </p>
-                  <p className="[font-family:'Noto_Sans',Helvetica] font-semibold text-green text-2xl">
-                    +2.5%
-                  </p>
-                </div>
-              </div>
-
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="token" className="text-light-modewhite">
-                    Select Token
-                  </Label>
-                  <div className="grid grid-cols-3 gap-3">
-                    {tokens.map((token) => (
-                      <button
-                        key={token.id}
-                        type="button"
-                        onClick={() => setSelectedToken(token.id)}
-                        className={`flex flex-col items-center gap-2 p-4 rounded-md border-2 transition-all duration-200 ${
-                          selectedToken === token.id
-                            ? 'border-green bg-green/10'
-                            : 'border-[#d7dce5] bg-light-modeblack hover:border-green/50'
-                        }`}
-                      >
-                        <img src={token.image} alt={token.symbol} className="w-8 h-8" />
-                        <span className="[font-family:'Noto_Sans',Helvetica] font-medium text-light-modewhite text-sm">
-                          {token.symbol}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="amount" className="text-light-modewhite">
-                    Amount (USD)
-                  </Label>
-                  <Input
-                    id="amount"
-                    type="number"
-                    step="0.01"
-                    min="0.01"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    placeholder="Enter amount"
-                    className="bg-light-modeblack border-[#d7dce5] text-light-modewhite placeholder:text-light-modegrey text-lg h-12"
-                    required
-                  />
-                  {amount && (
-                    <p className="[font-family:'Noto_Sans',Helvetica] font-normal text-light-modegrey text-sm">
-                      You'll receive approximately {(parseFloat(amount) / 0.0000083262).toLocaleString()} $CARELEVEL
-                    </p>
-                  )}
-                </div>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">               
 
                 {error && (
                   <div className="p-3 rounded-md bg-red/10 border border-red">
@@ -170,21 +114,40 @@ export const BuyCarelevel = (): JSX.Element => {
 
                 <Button
                   type="submit"
-                  disabled={loading || !amount}
-                  className="w-full h-auto bg-green rounded-md border border-solid border-[#cccccc2e] shadow-button px-4 py-3 [font-family:'Noto_Sans',Helvetica] font-semibold text-light-modeblack text-base hover:bg-green/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                  disabled={loading}
+                  className="w-full h-auto bg-[#29A140] rounded-md border border-solid border-[#cccccc2e] px-4 py-3 [font-family:'Noto_Sans',Helvetica] font-semibold text-white dark:text-[#F4FAFF] text-base hover:bg-[#1e7a2e] hover:scale-105 disabled:cursor-not-allowed transition-all duration-200 h-[36px] mb-6"
                 >
-                  {loading ? 'Processing...' : `Buy $CARELEVEL for $${amount || '0.00'}`}
+                  {loading ? 'Processing...' : `Buy on Pump.fun`}
                 </Button>
               </form>
 
-              <div className="p-4 bg-light-modeblack rounded-md border border-[#d7dce5]">
-                <p className="[font-family:'Noto_Sans',Helvetica] font-normal text-light-modegrey text-sm text-center">
-                  Purchasing $CARELEVEL increases your CareLevel Score and supports the community ecosystem
+              <div className="p-4 bg-light-modeblack rounded-md border border-[#d7dce5] dark:border-white/20 flex items-center gap-2 h-[36px]">
+                <p className="[font-family:'Noto_Sans',Helvetica] font-normal text-light-modegrey text-[12px] text-center w-[136px] whitespace-nowrap">
+                  Add $CARELEVEL coin CA:
                 </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+                <p className="truncate max-w-[200px] text-[12px] text-light-modewhite dark:text-[#F4FAFF]">
+                  {tokenAddress}
+                </p>
+                <button 
+                  onClick={handleCopyAddress}
+                  className="relative p-1 hover:bg-white/10 rounded transition-colors duration-200"
+                  title={copySuccess ? "Copied!" : "Copy address"}
+                >
+                  <img 
+                    src="/duplicate.svg" 
+                    alt="Copy" 
+                    className={`w-[20px] h-[20px] dark:brightness-0 dark:invert transition-all duration-200 ${
+                      copySuccess ? 'opacity-50' : ''
+                    }`} 
+                    style={{ filter: 'brightness(0)' }} 
+                  />
+                  {copySuccess && (
+                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-green text-white text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap">
+                      Copied!
+                    </div>
+                  )}
+                </button>
+              </div> 
       </div>
     </div>
   );

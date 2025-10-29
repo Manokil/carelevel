@@ -5,29 +5,108 @@
   .all-\[unset\] {
     all: unset;
   }
+  
+  /* CARELEVEL brand font styling */
+  .font-carelevel {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: 0;
+  }
+  
+  /* Background pattern styling */
+  .bg-pattern {
+    background-repeat: repeat;
+    background-size: auto;
+    background-position: center;
+    mix-blend-mode: normal;
+  }
+  
+  /* Invert subtract.svg logo in dark mode */
+  .dark img[src*="subtract"] {
+    filter: invert(1) brightness(1.2);
+  }
+  
+  /* Invert sun icon in dark mode */
+  .dark img[src*="sun.svg"] {
+    filter: invert(1) brightness(1.1);
+  }
+  
+  /* Make moon icon filled with light color in dark mode */
+  .dark img[src*="moon.svg"] {
+    filter: brightness(0) invert(1);
+    opacity: 1;
+  }
+  
+  /* Moon icon normal in light mode */
+  img[src*="moon.svg"] {
+    opacity: 0.7;
+  }
 }
 
+/* ===== THEME COLORS ===== */
+
+/* Accent Colors (same in both themes) */
 :root {
   --blue: rgba(68, 138, 255, 1);
-  --button: 0px 8px 16px 0px rgba(0, 0, 0, 0.04);
   --coolgray-700: rgba(74, 85, 104, 1);
   --coolgraywhite: rgba(255, 255, 255, 1);
-  --dark-modeblack: rgba(13, 17, 23, 1);
-  --dark-modeborder: rgba(245, 247, 249, 0.18);
-  --dark-modeborder-2: rgba(48, 54, 61, 1);
-  --dark-modedark-grey: rgba(23, 27, 32, 1);
-  --dark-modegrey: rgba(108, 120, 134, 1);
-  --dark-modewhite: rgba(244, 250, 255, 1);
   --green: rgba(41, 161, 64, 1);
-  --light-modeblack: rgba(249, 249, 249, 1);
-  --light-modeborder: rgba(204, 204, 204, 0.18);
-  --light-modeborder-2: rgba(215, 221, 229, 1);
-  --light-modedark-grey: rgba(255, 255, 255, 1);
-  --light-modegrey: rgba(108, 120, 134, 1);
-  --light-modewhite: rgba(13, 17, 23, 1);
   --orange: rgba(247, 147, 26, 1);
   --red: rgba(244, 67, 54, 1);
   --yellow: rgba(255, 193, 11, 1);
+}
+
+/* Light Mode (Default) - Clean white backgrounds */
+:root {
+  /* Shadows */
+  --button: 0px 8px 16px 0px rgba(0, 0, 0, 0.06);
+  
+  /* Backgrounds */
+  --light-modeblack: rgba(250, 250, 250, 1);        /* Very light gray background */
+  --light-modedark-grey: rgba(255, 255, 255, 1);    /* White cards */
+  
+  /* Text Colors */
+  --light-modewhite: rgba(17, 24, 39, 1);           /* Dark text (almost black) */
+  --light-modegrey: rgba(107, 114, 128, 1);         /* Gray secondary text */
+  
+  /* Borders */
+  --light-modeborder: rgba(229, 231, 235, 1);       /* Light borders */
+  --light-modeborder-2: rgba(209, 213, 219, 1);     /* Slightly darker borders */
+  
+  /* Same for dark-mode prefix (backwards compatibility) */
+  --dark-modeblack: rgba(250, 250, 250, 1);
+  --dark-modedark-grey: rgba(255, 255, 255, 1);
+  --dark-modewhite: rgba(17, 24, 39, 1);
+  --dark-modegrey: rgba(107, 114, 128, 1);
+  --dark-modeborder: rgba(229, 231, 235, 1);
+  --dark-modeborder-2: rgba(209, 213, 219, 1);
+}
+
+/* Dark Mode - Deep dark theme */
+.dark {
+  /* Shadows */
+  --button: 0px 8px 16px 0px rgba(0, 0, 0, 0.25);
+  
+  /* Backgrounds */
+  --light-modeblack: rgba(10, 14, 19, 1);           /* Very dark background */
+  --light-modedark-grey: rgba(26, 31, 38, 1);       /* Dark gray cards */
+  
+  /* Text Colors */
+  --light-modewhite: rgba(232, 234, 237, 1);        /* Off-white text */
+  --light-modegrey: rgba(156, 163, 175, 1);         /* Light gray secondary text */
+  
+  /* Borders */
+  --light-modeborder: rgba(55, 65, 81, 0.3);        /* Subtle dark borders */
+  --light-modeborder-2: rgba(55, 65, 81, 1);        /* Visible dark borders */
+  
+  /* Same for dark-mode prefix (backwards compatibility) */
+  --dark-modeblack: rgba(10, 14, 19, 1);
+  --dark-modedark-grey: rgba(26, 31, 38, 1);
+  --dark-modewhite: rgba(232, 234, 237, 1);
+  --dark-modegrey: rgba(156, 163, 175, 1);
+  --dark-modeborder: rgba(55, 65, 81, 0.3);
+  --dark-modeborder-2: rgba(55, 65, 81, 1);
 }
 
 :root {
@@ -210,12 +289,25 @@
 }
 
 @layer base {
+  html {
+    background-color: var(--light-modeblack);
+  }
+
   * {
     @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--light-modeblack);
+    color: var(--light-modewhite);
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Theme transition duration - 100ms for dark to light mode changes */
+  .theme-transition * {
+    transition: background-color 100ms ease-in-out, 
+                color 100ms ease-in-out, 
+                border-color 100ms ease-in-out,
+                box-shadow 100ms ease-in-out !important;
   }
 }
