@@ -8,7 +8,7 @@ export const BuyCarelevel = (): JSX.Element => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [copySuccess, setCopySuccess] = useState(false);
-  const { user, profile } = useAuth();
+  const { user, profile, connectWallet } = useAuth();
   const navigate = useNavigate();
 
   const tokenAddress = '8ZgBsi5s5xZKKKvz5BxSyzqgdh5d5oX3DtL9twAJpump';
@@ -41,7 +41,12 @@ export const BuyCarelevel = (): JSX.Element => {
     e.preventDefault();
 
     if (!user || !profile) {
-      navigate('/login');
+      // Not logged in: open wallet connect so the user can proceed via wallet
+      try {
+        await connectWallet('solana');
+      } catch (e) {
+        // no-op; errors are handled inside connectWallet
+      }
       return;
     }
 
@@ -90,9 +95,7 @@ export const BuyCarelevel = (): JSX.Element => {
     <div className="bg-light-modeblack dark:bg-[#171B20] transition-colors duration-100">
       <div className="mx-auto">
               <div className="text-center pb-4">
-                <div className="flex items-center justify-center gap-2 mb-3">
-                  <img src="/pumpfun.svg" alt="Pump.fun" className="w-32px h-32px" />
-                  <span className="[font-family:'Noto_Sans',Helvetica] text-light-modewhite dark:text-[#F4FAFF] text-xl tracking-[0] leading-10">X</span>
+                <div className="flex items-center justify-center gap-2 mb-3">                  
                   <img src="/subtract.svg" alt="Pump.fun" className="w-32px h-32px" />
                 </div>
                 <h1 className="[font-family:'Noto_Sans',Helvetica] font-semibold text-light-modewhite dark:text-[#F4FAFF] text-3xl tracking-[0] leading-10 mb-2">
@@ -117,7 +120,7 @@ export const BuyCarelevel = (): JSX.Element => {
                   disabled={loading}
                   className="w-full h-auto bg-[#29A140] rounded-md border border-solid border-[#cccccc2e] px-4 py-3 [font-family:'Noto_Sans',Helvetica] font-semibold text-white dark:text-[#F4FAFF] text-base hover:bg-[#1e7a2e] hover:scale-105 disabled:cursor-not-allowed transition-all duration-200 h-[36px] mb-6"
                 >
-                  {loading ? 'Processing...' : `Buy on Pump.fun`}
+                  {loading ? 'Processing...' : `Buy on Pump`}
                 </Button>
               </form>
 

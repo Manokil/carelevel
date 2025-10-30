@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
-import { useModal } from '../../contexts/ModalContext';
+// import { useModal } from '../../contexts/ModalContext';
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import {
@@ -285,7 +285,7 @@ export const LandingPage = (): JSX.Element => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const { user } = useAuth();
-  const { openModal } = useModal();
+  // const { openModal } = useModal();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [businessCarouselIndex, setBusinessCarouselIndex] = useState(0);
   const [cardsPerView, setCardsPerView] = useState(() => 
@@ -362,7 +362,7 @@ export const LandingPage = (): JSX.Element => {
 
           <div className="inline-flex items-center gap-2">
           <Button
-            onClick={() => user ? navigate('/buy') : navigate('/login')}
+            onClick={() => navigate('/buy')}
               className="h-auto bg-green rounded-md border border-solid border-[#cccccc2e] shadow-button px-4 py-2 [font-family:'Noto_Sans',Helvetica] font-medium text-white dark:text-[#F4FAFF] text-xs hover:bg-green/90 transition-all duration-200">
             Buy $CARELEVEL
           </Button>
@@ -515,7 +515,7 @@ export const LandingPage = (): JSX.Element => {
             <Button
               onClick={() => {
                 setIsMobileMenuOpen(false);
-                user ? navigate('/buy') : navigate('/login');
+                navigate('/buy');
               }}
               className="w-full h-auto bg-green rounded-md border border-solid border-[#cccccc2e] shadow-button px-4 py-3 [font-family:'Noto_Sans',Helvetica] font-medium text-light-modewhite dark:text-[#F4FAFF] text-sm hover:bg-green/90 transition-all duration-200">
               Buy $CARELEVEL
@@ -548,7 +548,7 @@ export const LandingPage = (): JSX.Element => {
               <h1 className="[font-family:'Noto_Sans',Helvetica] font-medium  text-light-modewhite dark:text-[#F4FAFF] text-[48px] tracking-[-2.00px] leading-[56px] md:leading-[84px] md:text-7xl min-[576px]:text-left w-full max-w-[280px] min-[576px]:max-w-[335px] md:max-w-none">
                 <span className="whitespace-nowrap">Improve Your</span>
                 <br />
-                Carelevel
+                CareLevel
           </h1>
 
           </div>
@@ -674,11 +674,11 @@ export const LandingPage = (): JSX.Element => {
         <div className="flex flex-col items-center gap-[50px] w-full">
           <div className="flex flex-col items-center justify-center gap-4 w-full">
             <h2 className="[font-family:'Noto_Sans',Helvetica] font-medium text-light-modewhite dark:text-[#F4FAFF] text-[44px] md:text-[56px] text-center tracking-[-2.00px] leading-[64px]">
-              Carelevel Score
+              CareLevel Score
             </h2>
 
             <p className="[font-family:'Noto_Sans',Helvetica] font-normal text-light-modegrey text-xl text-center tracking-[0] leading-[30px]">
-              What is the CareLevel Score? The CareLevel score is a calculated
+              What is the CareLevel Score? The CareLevel Score is a calculated
               event of $CARELEVEL purchases, donations, and project motivation.
               The score was developed to visually track the mission of CareLevel
               to keep creators, businesses, and new innovators inspired to push
@@ -712,7 +712,7 @@ export const LandingPage = (): JSX.Element => {
             <Tabs defaultValue="carelevel">
               <TabsList className="flex md:inline-flex items-center bg-transparent p-0 h-auto w-full md:w-auto">
                 <TabsTrigger
-                  value="carelevel"
+                  value="carelevelscore"
                   className="flex-1 md:flex-none px-4 py-2 bg-light-modedark-grey rounded-[6px_0px_0px_6px] border border-solid border-[#28a13f] data-[state=active]:bg-light-modedark-grey [font-family:'Noto_Sans',Helvetica] font-normal text-[#28a13f] text-[13px] text-center tracking-[0] leading-5"
                 >
                   Top $CARELEVEL
@@ -848,7 +848,7 @@ export const LandingPage = (): JSX.Element => {
               </Button>
 
               <Button
-                onClick={() => user ? navigate('/buy') : navigate('/login')}
+                onClick={() => navigate('/buy')}
                 className="h-auto flex justify-center gap-2 px-4 py-2 bg-green rounded-md border border-solid border-[#cccccc2e] shadow-button hover:bg-green/90 transition-all duration-200 w-[160px]">
                 <span className="[font-family:'Noto_Sans',Helvetica] font-medium text-white dark:text-[#F4FAFF] text-sm tracking-[0] leading-5">
                   Buy $CARELEVEL
@@ -865,7 +865,7 @@ export const LandingPage = (): JSX.Element => {
       >
         <div className="flex flex-col items-center justify-center gap-4 w-full">
           <h2 className="[font-family:'Noto_Sans',Helvetica] font-medium text-light-modewhite dark:text-[#F4FAFF] text-[32px] md:text-[56px] text-center tracking-[-2.00px] leading-[64px]">
-            Carelevel Spotlight
+            CareLevel Spotlight
           </h2>
 
           <p className="[font-family:'Noto_Sans',Helvetica] font-normal text-light-modegrey text-xl text-center tracking-[0] leading-[30px]">
@@ -1072,7 +1072,7 @@ export const LandingPage = (): JSX.Element => {
               </Button>
 
               <Button
-                onClick={() => user ? navigate('/buy') : navigate('/login')}
+                onClick={() => navigate('/buy')}
                 className="h-auto flex justify-center gap-2 px-4 py-2 bg-green rounded-md border border-solid border-[#cccccc2e] shadow-button hover:bg-green/90 transition-all duration-200 w-full md:w-[140px]">
                 <span className="[font-family:'Noto_Sans',Helvetica] font-medium text-white dark:text-[#F4FAFF] text-sm tracking-[0] leading-5">
                   Buy $CARELEVEL

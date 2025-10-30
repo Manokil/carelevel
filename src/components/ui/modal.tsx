@@ -32,7 +32,7 @@ export const Modal: React.FC<ModalProps> = ({
       />
       
       {/* Modal content */}
-      <div className={`relative bg-white dark:bg-[#171B20] rounded-lg shadow-lg w-[335px] ${title === 'Login' ? 'h-[563px]' : title === 'Sign Up' ? 'h-[667px]' : title === 'Edit Profile' ? 'h-[800px]' : 'h-[351px]'} min-[450px]:w-[400px] ${title === 'Login' ? 'min-[450px]:h-[563px]' : title === 'Sign Up' ? 'min-[450px]:h-[667px]' : title === 'Edit Profile' ? 'min-[450px]:w-[600px] sm:min-[600px]:h-[660px]' : 'min-[450px]:h-[351px]'} mx-4 overflow-y-auto ${className}`}>
+      <div className={`relative bg-white dark:bg-[#171B20] rounded-lg shadow-lg w-[335px] ${title === 'Login' ? 'h-[605px]' : title === 'Sign Up' ? 'h-[667px]' : title === 'Edit Profile' ? 'h-[800px]' : 'h-[351px]'} min-[450px]:w-[400px] ${title === 'Login' ? 'min-[450px]:h-[605px]' : title === 'Sign Up' ? 'min-[450px]:h-[667px]' : title === 'Edit Profile' ? 'min-[450px]:w-[600px] sm:min-[600px]:h-[660px]' : 'min-[450px]:h-[351px]'} mx-4 overflow-y-auto ${className}`}>
         {/* Header - Hide for Transaction Success */}
         {title !== 'Transaction Success' && (
           <div className="flex items-center justify-end px-4 py-2 border-b border-light-modeborder dark:border-white/20 dark:border-white/20">

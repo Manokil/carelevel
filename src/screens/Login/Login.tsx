@@ -4,7 +4,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
-import { Card, CardContent } from '../../components/ui/card';
 
 export const Login = (): JSX.Element => {
   const [email, setEmail] = useState('');
@@ -57,10 +56,17 @@ export const Login = (): JSX.Element => {
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-2 bg-[#F9F9F9] dark:bg-[#505050] rounded-md p-2">
+          <div className="flex items-center justify-center gap-2 bg-[#F9F9F9] dark:bg-[#505050] rounded-md p-2 mb-[-12px]">
             <img src="/google.svg" alt="Google" className="w-16px h-16px" />
             <h1 className="[font-family:'Noto_Sans',Helvetica] font-normal text-light-modewhite dark:text-[#F4FAFF] text-sm tracking-[0] leading-5">
             Login with Google
+            </h1>
+          </div>
+
+          <div className="flex items-center justify-center gap-2 bg-[#F9F9F9] dark:bg-[#505050] rounded-md p-2">
+            <img src="/token-branded-sol.svg" alt="Wallet" className="w-16px h-16px" />
+            <h1 className="[font-family:'Noto_Sans',Helvetica] font-normal text-light-modewhite dark:text-[#F4FAFF] text-sm tracking-[0] leading-5">
+            Login with Wallet
             </h1>
           </div>
 
